@@ -6,19 +6,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const app_controller_1 = require("./app.controller");
-const app_service_1 = require("./app.service");
-const idea_module_1 = require("./idea/idea.module");
-let AppModule = class AppModule {
+const common_1 = require("@nestjs/common");
+const idea_controller_1 = require("./idea.controller");
+const idea_service_1 = require("./idea/idea.service");
+const idea_entity_1 = require("./idea.entity");
+let IdeaModule = class IdeaModule {
 };
-AppModule = __decorate([
+IdeaModule = __decorate([
     common_1.Module({
-        imports: [typeorm_1.TypeOrmModule.forRoot(), idea_module_1.IdeaModule],
-        controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService],
+        imports: [typeorm_1.TypeOrmModule.forFeature([idea_entity_1.IdeaEntity])],
+        controllers: [idea_controller_1.IdeaController],
+        providers: [idea_service_1.IdeaService],
     })
-], AppModule);
-exports.AppModule = AppModule;
-//# sourceMappingURL=app.module.js.map
+], IdeaModule);
+exports.IdeaModule = IdeaModule;
+//# sourceMappingURL=idea.module.js.map
