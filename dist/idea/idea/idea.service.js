@@ -21,24 +21,39 @@ let IdeaService = class IdeaService {
         this.ideaRepository = ideaRepository;
     }
     async showAll() {
-        return await this.ideaRepository.find();
+        return new Promise(resolve => {
+            resolve(this.ideaRepository.find());
+        });
     }
     async create(data) {
-        const idea = this.ideaRepository.create(data);
-        const ress = await this.ideaRepository.save(idea);
-        return ress;
+        return new Promise(resolve => {
+            const idea = this.ideaRepository.create(data);
+            resolve(this.ideaRepository.save(idea));
+        });
     }
     async read(id) {
-        await this.ideaRepository.findOne({ id });
-        return { deleted: true };
+        const idea = await this.ideaRepository.findOne({ where: { id } });
+        if (!idea) {
+            throw new common_1.HttpException('idea does not exist!', common_1.HttpStatus.NOT_FOUND);
+        }
+        return idea;
     }
     async update(id, data) {
+        let idea = await this.ideaRepository.findOne({ where: { id } });
+        if (!idea) {
+            throw new common_1.HttpException('idea does not exist!', common_1.HttpStatus.NOT_FOUND);
+        }
         await this.ideaRepository.update({ id }, data);
-        return await this.ideaRepository.findOne({ id });
+        idea = await this.ideaRepository.findOne({ where: { id } });
+        return idea;
     }
     async destroy(id) {
+        const idea = await this.ideaRepository.findOne({ where: { id } });
+        if (!idea) {
+            throw new common_1.HttpException('idea does not exist!', common_1.HttpStatus.NOT_FOUND);
+        }
         await this.ideaRepository.delete([id]);
-        return { deleted: true };
+        return idea;
     }
 };
 IdeaService = __decorate([

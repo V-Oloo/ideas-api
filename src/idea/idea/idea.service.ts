@@ -1,5 +1,5 @@
 import { IdeaDTO } from './../idea.dto';
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { IdeaEntity } from '../idea.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,29 +12,43 @@ export class IdeaService {
         ) {}
 
     async showAll(): Promise<IdeaEntity[]>  {
-      return await this.ideaRepository.find();
+      return new Promise(resolve => {
+        resolve(this.ideaRepository.find());
+        });
 
     }
 
-    async create(data: IdeaDTO) {
+    async  create(data: IdeaDTO): Promise<any> {
+        return new Promise(resolve => {
+            const idea = this.ideaRepository.create(data);
+            resolve(this.ideaRepository.save(idea));
+        });
+      }
 
-        const idea = this.ideaRepository.create(data);
-        const ress = await this.ideaRepository.save(idea);
-        return ress;
-    }
-
-    async read(id: string) {
-        await this.ideaRepository.findOne({id});
-        return {deleted: true};
+   async read(id: string) {
+        const idea = await this.ideaRepository.findOne({where: {id}});
+        if (!idea) {
+            throw new HttpException('idea does not exist!', HttpStatus.NOT_FOUND);
+        }
+        return idea;
     }
 
     async update(id: string, data: Partial<IdeaDTO>) {
+        let idea = await this.ideaRepository.findOne({where: {id}});
+        if (!idea) {
+            throw new HttpException('idea does not exist!', HttpStatus.NOT_FOUND);
+        }
         await this.ideaRepository.update({id}, data);
-        return await this.ideaRepository.findOne({id});
+        idea = await this.ideaRepository.findOne({where: {id}});
+        return idea;
     }
 
     async destroy(id: string) {
+        const idea = await this.ideaRepository.findOne({where: {id}});
+        if (!idea) {
+            throw new HttpException('idea does not exist!', HttpStatus.NOT_FOUND);
+        }
         await this.ideaRepository.delete([id]);
-        return {deleted: true };
+        return idea;
     }
 }

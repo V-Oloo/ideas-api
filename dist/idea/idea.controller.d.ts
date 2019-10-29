@@ -2,12 +2,11 @@ import { IdeaDTO } from './idea.dto';
 import { IdeaService } from './idea/idea.service';
 export declare class IdeaController {
     private ideaService;
+    private logger;
     constructor(ideaService: IdeaService);
-    showAllIdeas(): void;
-    createIdea(data: IdeaDTO): void;
-    readIdea(id: string): void;
+    showAllIdeas(): Promise<import("./idea.entity").IdeaEntity[]>;
+    createIdea(data: IdeaDTO): Promise<any>;
+    readIdea(id: string): Promise<import("./idea.entity").IdeaEntity>;
     updateIdea(id: string, data: Partial<IdeaDTO>): Promise<import("./idea.entity").IdeaEntity>;
-    destroyIdea(id: string): Promise<{
-        deleted: boolean;
-    }>;
+    destroyIdea(id: string): Promise<import("./idea.entity").IdeaEntity>;
 }

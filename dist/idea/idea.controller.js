@@ -12,22 +12,30 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const idea_dto_1 = require("./idea.dto");
 const idea_service_1 = require("./idea/idea.service");
 const common_1 = require("@nestjs/common");
+const validation_pipe_1 = require("../shared/validation.pipe");
 let IdeaController = class IdeaController {
     constructor(ideaService) {
         this.ideaService = ideaService;
+        this.logger = new common_1.Logger('IdeaController');
     }
-    showAllIdeas() {
-        this.ideaService.showAll();
+    async showAllIdeas() {
+        const ideas = await this.ideaService.showAll();
+        return ideas;
     }
-    createIdea(data) {
-        this.ideaService.create(data);
+    async createIdea(data) {
+        this.logger.log(JSON.stringify(data));
+        const idea = await this.ideaService.create(data);
+        return idea;
     }
-    readIdea(id) {
-        this.ideaService.read('id');
+    async readIdea(id) {
+        const idea = await this.ideaService.read(id);
+        return idea;
     }
     updateIdea(id, data) {
+        this.logger.log(JSON.stringify(data));
         return this.ideaService.update(id, data);
     }
     destroyIdea(id) {
@@ -38,24 +46,26 @@ __decorate([
     common_1.Get(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], IdeaController.prototype, "showAllIdeas", null);
 __decorate([
     common_1.Post(),
+    common_1.UsePipes(new validation_pipe_1.ValidationPipe()),
     __param(0, common_1.Body()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [idea_dto_1.IdeaDTO]),
+    __metadata("design:returntype", Promise)
 ], IdeaController.prototype, "createIdea", null);
 __decorate([
     common_1.Get(':id'),
     __param(0, common_1.Param('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], IdeaController.prototype, "readIdea", null);
 __decorate([
     common_1.Put(':id'),
+    common_1.UsePipes(new validation_pipe_1.ValidationPipe()),
     __param(0, common_1.Param('id')), __param(1, common_1.Body()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),

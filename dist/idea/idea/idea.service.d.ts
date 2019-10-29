@@ -5,12 +5,8 @@ export declare class IdeaService {
     private ideaRepository;
     constructor(ideaRepository: Repository<IdeaEntity>);
     showAll(): Promise<IdeaEntity[]>;
-    create(data: IdeaDTO): Promise<IdeaEntity>;
-    read(id: string): Promise<{
-        deleted: boolean;
-    }>;
+    create(data: IdeaDTO): Promise<any>;
+    read(id: string): Promise<IdeaEntity>;
     update(id: string, data: Partial<IdeaDTO>): Promise<IdeaEntity>;
-    destroy(id: string): Promise<{
-        deleted: boolean;
-    }>;
+    destroy(id: string): Promise<IdeaEntity>;
 }
