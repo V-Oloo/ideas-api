@@ -14,11 +14,12 @@ const app_service_1 = require("./app.service");
 const idea_module_1 = require("./idea/idea.module");
 const core_1 = require("@nestjs/core");
 const http_error_filter_1 = require("./shared/http-error.filter");
+const user_module_1 = require("./user/user.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     common_1.Module({
-        imports: [typeorm_1.TypeOrmModule.forRoot(), idea_module_1.IdeaModule],
+        imports: [typeorm_1.TypeOrmModule.forRoot(), idea_module_1.IdeaModule, user_module_1.UserModule],
         controllers: [app_controller_1.AppController],
         providers: [
             app_service_1.AppService,

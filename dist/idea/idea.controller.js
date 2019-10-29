@@ -79,7 +79,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], IdeaController.prototype, "destroyIdea", null);
 IdeaController = __decorate([
-    common_1.Controller('idea'),
+    common_1.Controller('api/ideas'),
     __metadata("design:paramtypes", [idea_service_1.IdeaService])
 ], IdeaController);
 exports.IdeaController = IdeaController;
