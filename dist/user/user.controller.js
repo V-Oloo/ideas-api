@@ -12,15 +12,19 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const user_entity_1 = require("./user.entity");
 const user_dto_1 = require("./user.dto");
 const common_1 = require("@nestjs/common");
 const user_service_1 = require("./user/user.service");
 const validation_pipe_1 = require("../shared/validation.pipe");
+const auth_guard_1 = require("../shared/auth.guard");
+const user_decorator_1 = require("./user.decorator");
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
     }
-    showAllUsers() {
+    showAllUsers(user) {
+        console.log(user);
         return this.userService.showAll();
     }
     login(data) {
@@ -32,8 +36,10 @@ let UserController = class UserController {
 };
 __decorate([
     common_1.Get('/api/users'),
+    common_1.UseGuards(new auth_guard_1.AuthGuard()),
+    __param(0, user_decorator_1.User('username')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [user_entity_1.UserEntity]),
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "showAllUsers", null);
 __decorate([
